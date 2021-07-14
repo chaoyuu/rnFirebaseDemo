@@ -1,16 +1,61 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 export function Signup ( props ) {
+  const [ email, setEmail ] = useState()
+  const [ password, setPassword ] = useState()
+
+  const[validEmail,setValidEmail] = useState(false)
+  const[validPassword,setValidPassword] = useState(false)
+
+  const HandleEmail = ( emailVal ) => {
+    //validate email
+    if( emailVal.indexOf('@') > 0 ) {
+      setValidEmail( true )
+    }
+    else {
+      setValidEmail( false )
+    }
+    setEmail( emailVal )
+  }
+  
+  const HandlePassword = ( passwordVal ) => {
+    //validate password
+    if( passwordVal.length >= 8 ) {
+      setValidPassword( true )
+    }
+    else {
+      setValidPassword( false )
+    }
+    setPassword( passwordVal )
+  }
+
+  const HandleSubmit = () => {
+    props.handler( email, password )
+  }
   return(
     <View>
       <Text style={SignupStyles.heading}>Sign up for an account</Text>
       <Text>Email</Text>
-      <TextInput style={SignupStyles.input}/>
+      <TextInput 
+      style={SignupStyles.input} 
+      onChangeText={ (val) => HandleEmail(val)  }
+      />
       <Text>Password</Text>
-      <TextInput style={SignupStyles.input} secureTextEntry={true}/>
-      <TouchableOpacity style={SignupStyles.button}>
+      <TextInput 
+      style={SignupStyles.input} 
+      secureTextEntry={true}
+      onChangeText={ (val) => HandlePassword(val) }
+      />
+      <TouchableOpacity 
+      style={(validEmail && validPassword) ? SignupStyles.button : SignupStyles.buttonDisabled} 
+      onPress={HandleSubmit}
+      disabled={ (validEmail && validPassword) ? false : true }
+      >
         <Text style={SignupStyles.buttonText}>Sign up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={ props.toggle }>
+        <Text>Sign in to your account</Text>
       </TouchableOpacity>
     </View>
   )
@@ -33,5 +78,10 @@ const SignupStyles = StyleSheet.create({
   buttonText: {
     color: '#ffffff',
     textAlign: 'center',
+  },
+  buttonDisabled: {
+    backgroundColor: '#cccccc',
+    padding: 5,
+    marginVertical: 10,
   }
 })
