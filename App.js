@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState,useEffect} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Constants from 'expo-constants';
 import { firebaseConfig } from './config';
 import * as firebase from 'firebase'
 
@@ -15,10 +16,13 @@ export default function App() {
   const [ signup, setSignup ] = useState( true )
 
   const HandleSignup = ( email, password ) => {
-    // console.log( email, password )
     firebase.auth().createUserWithEmailAndPassword( email, password )
     .then( (response) => console.log(response) )
     .catch( (error) => console.log(error) )
+  }
+
+  const HandleSignIn = ( email, password ) => {
+
   }
 
   const ToggleSignup = () => {
@@ -48,9 +52,10 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: Constants.statusBarHeight,
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
 });

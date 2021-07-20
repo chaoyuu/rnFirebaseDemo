@@ -10,7 +10,15 @@ export function Signup ( props ) {
 
   const HandleEmail = ( emailVal ) => {
     //validate email
-    if( emailVal.indexOf('@') > 0 ) {
+    // find where '@' character is
+    const atIndex = emailVal.indexOf('@')
+    // get the domain element (the section after '@')
+    const domain = emailVal.split('@').pop()
+    // get the tld from the domain (eg .com)
+    const tld = domain.split('.').pop()
+    // check if the email contains spaces
+    const diff = emailVal.split(' ').join('').length - emailVal.length
+    if( atIndex > 0 && domain.length > 2 && tld.length >= 2 && tld !== domain && diff === 0 ) {
       setValidEmail( true )
     }
     else {
@@ -21,7 +29,19 @@ export function Signup ( props ) {
   
   const HandlePassword = ( passwordVal ) => {
     //validate password
-    if( passwordVal.length >= 8 ) {
+    // check the length
+    const pwLength = passwordVal.length
+    // check if numeric
+    const isNumeric = isNaN(parseInt( passwordVal ))
+    // check if it contains capitals
+    const chars = passwordVal.split('')
+    const caps = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const containsCaps = chars.some( (val) => caps.split('').includes(val) )
+    // check if it contains special characters
+    const specialChars = '!@#$%^&*()_+=-{}[]|\/?><~`"'
+    const containsSpecial = chars.some( (val) => specialChars.split('').includes(val))
+
+    if( pwLength >= 8 && isNumeric && containsCaps && containsSpecial ) {
       setValidPassword( true )
     }
     else {
@@ -33,15 +53,16 @@ export function Signup ( props ) {
   const HandleSubmit = () => {
     props.handler( email, password )
   }
+  
   return(
-    <View>
+    <View style={SignupStyles.pageContainer}>
       <Text style={SignupStyles.heading}>Sign up for an account</Text>
-      <Text>Email</Text>
+      <Text style={SignupStyles.label}>Email</Text>
       <TextInput 
       style={SignupStyles.input} 
       onChangeText={ (val) => HandleEmail(val)  }
       />
-      <Text>Password</Text>
+      <Text style={SignupStyles.label}>Password</Text>
       <TextInput 
       style={SignupStyles.input} 
       secureTextEntry={true}
@@ -54,25 +75,40 @@ export function Signup ( props ) {
       >
         <Text style={SignupStyles.buttonText}>Sign up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={ props.toggle }>
-        <Text>Sign in to your account</Text>
+      <TouchableOpacity style={SignupStyles.authToggle} onPress={ props.toggle }>
+        <Text style={SignupStyles.toggleText}>Sign in to your account</Text>
       </TouchableOpacity>
     </View>
   )
 }
 
 const SignupStyles = StyleSheet.create({
+  pageContainer: {
+    marginTop: 50,
+    minWidth: 320,
+    backgroundColor: '#f3f3f3',
+    padding: 10,
+    borderRadius: 15,
+  },
   heading: {
-    fontSize: 22,
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  label: {
+    fontWeight: '600',
   },
   input: {
     fontSize: 18,
     borderColor: '#cccccc',
     borderWidth: 2,
+    padding: 5,
+    marginBottom: 10,
+    backgroundColor: '#ffffff',
   },
   button: {
     backgroundColor: '#000000',
-    padding: 5,
+    padding: 10,
     marginVertical: 10,
   },
   buttonText: {
@@ -81,7 +117,13 @@ const SignupStyles = StyleSheet.create({
   },
   buttonDisabled: {
     backgroundColor: '#cccccc',
-    padding: 5,
+    padding: 10,
     marginVertical: 10,
-  }
+  },
+  authToggle: {
+    marginVertical: 10,
+  },
+  toggleText : {
+    textAlign: 'center',
+  },
 })
