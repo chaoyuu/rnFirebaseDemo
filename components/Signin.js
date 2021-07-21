@@ -40,7 +40,7 @@ export function Signin ( props ) {
       onChangeText={ (val) => setPassword(val) }
       />
       <TouchableOpacity 
-      style={(!validEmail || !validPassword) ? SignStyles.buttonDisabled : SigninStyles.button} 
+      style={(!validEmail || !validPassword) ? SigninStyles.buttonDisabled : SigninStyles.button} 
       onPress={ () => props.handler }
       disabled={ (!validEmail || !validPassword) ? true:false}
       >
