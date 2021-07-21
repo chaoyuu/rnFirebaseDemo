@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import { useNavigation } from '@react-navigation/core';
 
 export function Signin ( props ) {
-  const [email,setEmail] = useState()
-  const [password,setPassword] = useState()
+  const [email,setEmail] = useState('')
+  const [password,setPassword] = useState('')
   const [validEmail,setValidEmail] = useState()
   const [validPassword,setValidPassword] = useState()
 
   useEffect( () => {
+    
     const emailNoSpaces = email.split(' ').join('').length
     if( email.length >= 5 && email.length === emailNoSpaces) {
       setValidEmail( true )
@@ -22,7 +23,14 @@ export function Signin ( props ) {
     else {
       setValidPassword( false )
     }
+  
   }, [email,password])
+
+  useEffect( () => {
+    if( props.auth ) {
+      navigation.reset({ index: 0, routes: [ {name: "Home"} ]})
+    }
+  }, [ props.auth ])
 
   const navigation = useNavigation()
   return(

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
@@ -10,6 +10,12 @@ export function Signup ( props ) {
   const[validPassword,setValidPassword] = useState(false)
 
   const navigation = useNavigation()
+
+  useEffect( () => {
+    if( props.auth ) {
+      navigation.reset({ index: 0, routes: [ {name: "Home"} ]})
+    }
+  }, [props.auth])
 
   const HandleEmail = ( emailVal ) => {
     //validate email

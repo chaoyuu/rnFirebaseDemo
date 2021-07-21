@@ -3,6 +3,7 @@ import React, {useState,useEffect} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/core';
 import { firebaseConfig } from './config';
 import * as firebase from 'firebase'
 
@@ -15,8 +16,13 @@ if( !firebase.apps.length ) {
 }
 
 export default function App() {
-  const [ signup, setSignup ] = useState( true )
   const [ auth, setAuth ] = useState( false )
+
+  // useEffect( () => {
+  //   if( auth ) {
+  //     navigation.navigate("Home")
+  //   }
+  // }, [auth])
 
   const HandleSignup = ( email, password ) => {
     // console.log( email, password )
@@ -52,10 +58,10 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Signup">
         <Stack.Screen name="Signin" >
-          { (props) => <Signin {...props} handler={HandleSignin} />}
+          { (props) => <Signin {...props} handler={HandleSignin} auth={auth}/>}
         </Stack.Screen>
         <Stack.Screen name="Signup">
-          { (props) => <Signup {...props} handler={HandleSignup} />}
+          { (props) => <Signup {...props} handler={HandleSignup} auth={auth}/>}
         </Stack.Screen>
         <Stack.Screen name="Home" component={Home}/>
       </Stack.Navigator>
