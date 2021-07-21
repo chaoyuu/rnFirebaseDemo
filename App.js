@@ -23,6 +23,14 @@ export default function App() {
   //     navigation.navigate("Home")
   //   }
   // }, [auth])
+  firebase.auth().onAuthStateChanged( (user) => {
+    if( user ) {
+      setAuth( true )
+    }
+    else {
+      setAuth( false )
+    }
+  })
 
   const HandleSignup = ( email, password ) => {
     // console.log( email, password )
@@ -63,7 +71,11 @@ export default function App() {
         <Stack.Screen name="Signup">
           { (props) => <Signup {...props} handler={HandleSignup} auth={auth}/>}
         </Stack.Screen>
-        <Stack.Screen name="Home" component={Home}/>
+        <Stack.Screen 
+        name="Home" 
+        component={Home}
+        options={ {title: "Demo App"} }
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )
