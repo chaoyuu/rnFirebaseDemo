@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
 export function Signup ( props ) {
   const [ email, setEmail ] = useState()
@@ -7,6 +8,8 @@ export function Signup ( props ) {
 
   const[validEmail,setValidEmail] = useState(false)
   const[validPassword,setValidPassword] = useState(false)
+
+  const navigation = useNavigation()
 
   const HandleEmail = ( emailVal ) => {
     //validate email
@@ -54,7 +57,7 @@ export function Signup ( props ) {
       >
         <Text style={SignupStyles.buttonText}>Sign up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={ props.toggle }>
+      <TouchableOpacity onPress={ () => navigation.navigate("Signin") }>
         <Text>Sign in to your account</Text>
       </TouchableOpacity>
     </View>
